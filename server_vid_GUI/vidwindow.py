@@ -1,41 +1,35 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout, QWidget, QPushButton
+import numpy
+import cv2
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtCore import QTimer
-from vidServer import vidServer
 
 class WebcamApp(QMainWindow):
-    def __init__(self, app):
+    def __init__(self, stream):
         super().__init__()
-        self.vidImg = vidServer(6789)
-        # Initialize QLabel as the central widget
-        self.image_label = QLabel(self)
-        self.setCentralWidget(self.image_label)
+        self.vid_server = stream
 
-        # Setup Timer
-        self.timer = QTimer(self)
+        # Create a QLabel to display the image
+        self.label = QLabel()
+        self.setCentralWidget(self.label)
+
+        # Set up a QTimer to update the image
+        self.timer = QTimer()
+        self.timer.setInterval(10)  # Update interval in milliseconds
         self.timer.timeout.connect(self.update_image)
-        self.timer.start(100)  # Update interval in milliseconds (e.g., 100 ms for 10 times per second)
+        self.timer.start()
 
-        # Window settings
-        self.setWindowTitle('PyQt6 Live Image Update')
-        self.setGeometry(100, 100, 800, 600)  # x, y, width, height
-
-        # Initial image setup or variable
-        self.image_path = self.img
-        self.display_image(self.image_path)
-
-    def display_image(self, image_path):
-        # Load the image
-        pixmap = QPixmap(image_path)
-
-        # Set the pixmap onto the label
-        self.image_label.setPixmap(pixmap)
-
-        # Resize the label to fit the image
-        self.image_label.resize(pixmap.width(), pixmap.height())
 
     def update_image(self):
-        self.img = self.vidImg.getImg()
-        if self.img is not None:
-            self.image_path = self.img
-            self.display_image(self.image_path)
+        # Get a new image from the vidServer
+        img = self.vid_server.getImg()
+        if img is not None:
+            # Convert the NumPy array to QImage
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            height, width, channels = img.shape
+            bytes_per_line = channels * width
+            q_image = QImage(img.data, width, height, bytes_per_line, QImage.Format.Format_RGB888)
+
+            # Convert QImage to QPixmap and display it
+            pixmap = QPixmap.fromImage(q_image)
+            self.label.setPixmap(pixmap)

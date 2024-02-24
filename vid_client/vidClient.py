@@ -50,7 +50,7 @@ class vidClient():
 
 if __name__ == "__main__":
     print("Starting client")
-    sendVideo = vidClient("10.110.218.20", 6789)
+    sendVideo = vidClient("192.168.254.20", 6789)
     while True:
         print("Running background")
         time.sleep(1)

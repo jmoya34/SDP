@@ -21,9 +21,6 @@ class vidServer():
         server.set_fn_message_received(self.message_received)
         server.run_forever()
 
-    def __updateTimer(self):
-        time.time()
-
     def getImg(self):
         # Image from client
         elapsedWaitTime = time.time() - self.startTime
@@ -58,6 +55,7 @@ def main():
     while True:
         current_frame = vidImg.getImg()
         if current_frame is not None:
+            print("Frame type:", type(current_frame))
             cv2.imshow("Stream", current_frame)
             cv2.waitKey(1)
 

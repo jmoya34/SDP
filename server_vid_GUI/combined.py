@@ -1,11 +1,25 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QLabel, QVBoxLayout, QLineEdit
-from PySide6.QtCore import QTimer
+from PyQt6.QtCore import QTimer
+from PyQt6.QtGui import QImage, QPixmap
+from vidServer import vidServer
+import cv2
 
 class ArrowButtonsDemo(QWidget):
     def __init__(self):
         super().__init__()
+        self.vid_server = vidServer(6789)  # Create your vidServer instance
         self.initUI()
+
+    def initTelescopeCam(self):
+        # Create a QLabel to display the image
+        self.label = QLabel()
+
+        # Set up a QTimer to update the image
+        self.timer = QTimer()
+        self.timer.setInterval(10)  # Update interval in milliseconds
+        self.timer.timeout.connect(self.update_image)
+        self.timer.start()
 
     def initUI(self):
         layout = QVBoxLayout()
@@ -24,20 +38,28 @@ class ArrowButtonsDemo(QWidget):
 
         # Set up an updating field for drone status
         self.statusLayout = self.infoLabels()
-        self.timer = QTimer()
-        self.timer.setInterval(300)  # Update interval in milliseconds
-        self.timer.timeout.connect(self.update_info)
-        self.timer.start()
+        self.infotimer = QTimer()
+        self.infotimer.setInterval(300)  # Update interval in milliseconds
+        self.infotimer.timeout.connect(self.update_info)
+        self.infotimer.start()
 
-        # Add all the layouts together
+        # Create vid window
+        self.initTelescopeCam()
+        #ADD Add vertically somehow
+
+        # Add all the UI layouts together
         layout.addLayout(self.commandsLayout)
         layout.addLayout(self.serv1layout)
         layout.addLayout(self.serv2layout)
         layout.addLayout(self.statusLayout)
         
+        # Main layout
+        mainLayout = QHBoxLayout()
+        mainLayout.addLayout(layout)
+        mainLayout.addWidget(self.label)
 
         # Put final layout into window
-        self.setLayout(layout)
+        self.setLayout(mainLayout) #ADD fix
         self.setWindowTitle('Prototype gui')
 
     def createTextField(self):
@@ -119,6 +141,21 @@ class ArrowButtonsDemo(QWidget):
         print("Getting info")
         #To change labels try
         #ADD self.constellation.setText(new_text)
+
+    def update_image(self):
+        # Get a new image from the vidServer
+        img = self.vid_server.getImg()
+        if img is not None:
+            # Convert the NumPy array to QImage
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            height, width, channels = img.shape
+            bytes_per_line = channels * width
+            q_image = QImage(img.data, width, height, bytes_per_line, QImage.Format.Format_RGB888)
+
+            # Convert QImage to QPixmap and display it
+            pixmap = QPixmap.fromImage(q_image)
+            self.label.setPixmap(pixmap)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
