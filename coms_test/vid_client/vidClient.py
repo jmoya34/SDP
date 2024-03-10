@@ -32,7 +32,7 @@ class vidClient():
     def on_open(self, ws):
         # Connect to webcam by inputing 0 to vid capture
         try:
-            cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # this is for windows but will be adjusted
+            cap = cv2.VideoCapture(0) # this is for windows but will be adjusted
             print("capture cam")
             while cap.isOpened():
                 ret, frame = cap.read()
