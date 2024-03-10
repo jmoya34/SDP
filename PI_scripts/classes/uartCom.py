@@ -24,13 +24,14 @@ class uartCom():
 
     def __communicate(self, timeDelay):
         while(1):
-            command = self.commandToArduino
+            command = self.commandToArduino.get() 
             if command is not None:
+                print("command:", command)
                 speeds = json.loads(command)
                 motor1_speed = speeds["Motor1"]
                 motor2_speed = speeds["Motor2"] 
-                command = "{},{}\n".format(motor1_speed, motor2_speed)
-                self.com.write(command.encode('utf-8'))
+                arduinoCommand = "{},{}\n".format(motor1_speed, motor2_speed)
+                self.com.write(arduinoCommand.encode('utf-8'))
                 time.sleep(timeDelay)
 
             # Check if there's incoming data

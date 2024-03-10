@@ -11,7 +11,7 @@ def main():
         motorCommand = startServer.getCommand()
         if motorCommand is not None:
             print("Command is:", motorCommand)
-            coms.commandToArduino(motorCommand)
+            coms.sendCommand(motorCommand)
 
 
         command = coms.getCommand()

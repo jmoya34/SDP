@@ -10,7 +10,7 @@ class ArrowButtonsDemo(QWidget):
     def __init__(self):
         super().__init__()
         self.vid_server = vidServer(6789)  # Create your vidServer instance
-        self.commandPi = sendCommand('192.168.254.20', 65432)
+        self.commandPi = sendCommand('192.168.254.83', 65432)
         self.motorPos1 = 0
         self.motorPos2 = 0
         self.maxMotorPos = 100
