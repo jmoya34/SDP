@@ -82,7 +82,7 @@ class ArrowButtonsDemo(QWidget):
         # Servo 1 buttons
         layout = QVBoxLayout()
 
-        self.serv1Text = QLabel("Servo 1 Position:")
+        self.serv1Text = QLabel("Servo1 Position:")
         layout.addWidget(self.serv1Text)
         # buttons
         buttonLayout = QHBoxLayout()
@@ -97,7 +97,7 @@ class ArrowButtonsDemo(QWidget):
         # Servo 2 buttons
         layout = QVBoxLayout()
 
-        self.serv2Text = QLabel("Servo 2 Position:")
+        self.serv2Text = QLabel("Servo2 Position:")
         layout.addWidget(self.serv2Text)
         # buttons
         buttonLayout = QHBoxLayout()
@@ -203,8 +203,8 @@ class ArrowButtonsDemo(QWidget):
         #To change labels try
         #ADD self.constellation.setText(new_text)
 
-        self.serv1Text.setText("Servo 1 Position: " + str(self.motorPos1))
-        self.serv2Text.setText("Servo 2 Position: " + str(self.motorPos2))
+        self.serv1Text.setText("Servo1 Position: " + str(self.motorPos1))
+        self.serv2Text.setText("Servo2 Position: " + str(self.motorPos2))
 
     def update_image(self):
         # Get a new image from the vidServer
