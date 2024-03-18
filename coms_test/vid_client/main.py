@@ -32,7 +32,7 @@ def on_open(ws):
 
 if __name__ == "__main__":
     # Replace 'localhost' with your server's IP if necessary
-    ws = websocket.WebSocketApp("ws://10.110.218.20:6789",
+    ws = websocket.WebSocketApp("ws://192.168.254.20:6789",
                                 on_open=on_open)
     ws.run_forever()
     while True:

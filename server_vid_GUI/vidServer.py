@@ -46,6 +46,7 @@ class vidServer():
 
     def message_received(self, client, server, message):
         img_data = base64.b64decode(message)
+        print(type(img_data))
         nparr = np.frombuffer(img_data, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if img is not None:

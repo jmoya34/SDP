@@ -11,6 +11,7 @@ def client_left(client, server):
 
 def message_received(message):
     # Assuming the message is the base64-encoded image
+    print("data collection")
     img_data = base64.b64decode(message)
     nparr = np.frombuffer(img_data, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
