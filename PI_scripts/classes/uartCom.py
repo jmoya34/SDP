@@ -34,10 +34,10 @@ class uartCom():
                 self.com.write(arduinoCommand.encode('utf-8'))
                 time.sleep(timeDelay)
 
+            line = self.com.readline().decode('utf-8').rstrip()
             # Check if there's incoming data
-            if self.com.in_waiting > 0:  
-                incoming_data = self.com.readline().decode('utf-8').rstrip() 
-                self.que.put(incoming_data)
+            if line is not '':  
+                self.que.put(line)
 
     def __attemptConnection(self, path, baud, timeDelay):
         self.com = None
